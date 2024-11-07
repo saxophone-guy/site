@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en-gb"
+  dir="ltr">
+
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313//favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313//favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313//favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313//android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313//apple-touch-icon.png">
+
+<meta name="description" content=""/>
+
+<title>
+    
+    Optimizing a square sum sequence | jazz
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/posts/first-post/"/>
+
+<meta property="og:url" content="http://localhost:1313/posts/first-post/">
+  <meta property="og:site_name" content="jazz">
+  <meta property="og:title" content="Optimizing a square sum sequence">
+  <meta property="og:description" content="Mathematical background Before I start talking about this, let’s understand what we’re actually computing.
+$\sum_{i=0}^{n-1} i^2 \pmod{1000000007}$
+There are several mathematical properties we can exploit here:
+The sum of squares has a closed form: $\sum_{i=0}^{n-1} i^2 = \frac{(n-1)(n)(2n-1)}{6}$
+However, this isn’t immediately useful to us because the result would overflow for a large $n$, and we need the modulo at each step. The properties of modular arithmetic:
+$(a &#43; b) \bmod m = ((a \bmod m) &#43; (b \bmod m)) \bmod m$ $(a * b) \bmod m = ((a \bmod m) * (b \bmod m)) \bmod m$ This means we can:">
+  <meta property="og:locale" content="en_gb">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-11-06T21:55:08+05:30">
+    <meta property="article:modified_time" content="2024-11-06T21:55:08+05:30">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.14e1218b5e9a0404dee05846c1ffd60757d618f79d3897fdd4eea5f441a9a7af.css" media="all">
+
+
+
+
+
+  </head>
+
+  
+
+  
+  
+  
+
+  <body class="auto">
+
+    <div class="content">
+      <header>
+        
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">jazz</a>
+    </h1>
+
+    <div class="flex">
+        
+
+        
+        
+      
+        <p class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="/about" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+      </header>
+
+      <main class="main">
+        
+
+
+
+
+
+<div class="breadcrumbs">
+    
+    <a href="/">Home</a>
+    <span class="breadcrumbs-separator"> > </span>
+    
+    <a href="/posts/">Posts</a>
+    <span class="breadcrumbs-separator"> > </span>
+    
+    <a class="breadcrumbs-current" href="/posts/first-post/">Optimizing a square sum sequence</a>
+</div>
+
+
+
+<div >
+
+  <div class="single-intro-container">
+
+    
+
+    <h1 class="single-title">Optimizing a square sum sequence</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2024-11-06T21:55:08&#43;05:30">November 6, 2024</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h3 id="mathematical-background">Mathematical background</h3>
+<p>Before I start talking about this, let&rsquo;s understand what we&rsquo;re actually computing.</p>
+<p>$\sum_{i=0}^{n-1} i^2 \pmod{1000000007}$</p>
+<p>There are several mathematical properties we can exploit here:</p>
+<ol>
+<li>
+<p>The sum of squares has a closed form:
+$\sum_{i=0}^{n-1} i^2 = \frac{(n-1)(n)(2n-1)}{6}$</p>
+<ul>
+<li>However, this isn&rsquo;t immediately useful to us because the result would overflow for a large $n$, and we need the modulo at each step.</li>
+</ul>
+</li>
+<li>
+<p>The properties of modular arithmetic:</p>
+<ul>
+<li>$(a + b) \bmod m = ((a \bmod m) + (b \bmod m)) \bmod m$</li>
+<li>$(a * b) \bmod m = ((a \bmod m) * (b \bmod m)) \bmod m$</li>
+</ul>
+<p>This means we can:</p>
+<ul>
+<li>Batch our additions before taking modulo</li>
+<li>Break down large multiplications</li>
+</ul>
+</li>
+<li>
+<p>The properties of square numbers:</p>
+<ul>
+<li>The difference between consecutive squares follows a pattern: $(n+1)^2 - n^2 = 2n + 1$</li>
+<li>This means each square can be computed from the previous one with addition</li>
+</ul>
+</li>
+<li>
+<p>Choice of Modulus:</p>
+<ul>
+<li>1000000007 is prime</li>
+<li>It&rsquo;s less than 2^30, allowing safe multiplication of two numbers &lt; mod in a 64-bit integer</li>
+</ul>
+</li>
+</ol>
+<p>Now, let&rsquo;s see how we can apply these properties to our code.</p>
+<h3 id="the-implementation">The implementation</h3>
+<p>Let&rsquo;s start with the naive implementation:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">uint64_t</span> <span style="color:#a6e22e">sum_squares_mod</span>(<span style="color:#66d9ef">uint32_t</span> n) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint64_t</span> sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">uint32_t</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> n; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>        sum <span style="color:#f92672">=</span> (sum <span style="color:#f92672">+</span> ((<span style="color:#66d9ef">uint64_t</span>)i <span style="color:#f92672">*</span> i) <span style="color:#f92672">%</span> <span style="color:#ae81ff">1000000007</span>) <span style="color:#f92672">%</span> <span style="color:#ae81ff">1000000007</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> sum;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Now, here, something you can see is that property #2 is immediately applicable, so now we can batch our modulo operations:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">uint64_t</span> <span style="color:#a6e22e">sum_squares_mod_v2</span>(<span style="color:#66d9ef">uint32_t</span> n) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">uint32_t</span> MOD <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000000007</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint64_t</span> sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint64_t</span> batch_sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">uint32_t</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> n; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>        batch_sum <span style="color:#f92672">+=</span> (<span style="color:#66d9ef">uint64_t</span>)i <span style="color:#f92672">*</span> i;
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Apply modulo every 1024 iterations to prevent overflow
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> ((i <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">1023</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1023</span>) {
+</span></span><span style="display:flex;"><span>            sum <span style="color:#f92672">=</span> (sum <span style="color:#f92672">+</span> batch_sum <span style="color:#f92672">%</span> MOD) <span style="color:#f92672">%</span> MOD;
+</span></span><span style="display:flex;"><span>            batch_sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Handle remaining elements
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    sum <span style="color:#f92672">=</span> (sum <span style="color:#f92672">+</span> batch_sum <span style="color:#f92672">%</span> MOD) <span style="color:#f92672">%</span> MOD;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> sum;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>This is pretty good, and we <em>could</em> stop here if we wanted to, but there&rsquo;s some optimizations to be made.</p>
+<p>The grunt of the work at high values of $i$ is calculating the value of $i^2$. We can use property #3 now, letting the computer just incrementally calculate the squares instead of computing $i \cdot i$ every single time!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">uint64_t</span> <span style="color:#a6e22e">sum_squares_mod_v3</span>(<span style="color:#66d9ef">uint32_t</span> n) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">uint32_t</span> MOD <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000000007</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint64_t</span> sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint64_t</span> square <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;      <span style="color:#75715e">// Current square
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">uint64_t</span> increment <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;   <span style="color:#75715e">// Initial difference (2*0 + 1)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">uint64_t</span> batch_sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">uint32_t</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> n; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>        batch_sum <span style="color:#f92672">+=</span> square;
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Update using the difference between consecutive squares
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        square <span style="color:#f92672">+=</span> increment;
+</span></span><span style="display:flex;"><span>        increment <span style="color:#f92672">+=</span> <span style="color:#ae81ff">2</span>;  <span style="color:#75715e">// Next difference will be 2 more
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> ((i <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">1023</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1023</span>) {
+</span></span><span style="display:flex;"><span>            sum <span style="color:#f92672">=</span> (sum <span style="color:#f92672">+</span> batch_sum <span style="color:#f92672">%</span> MOD) <span style="color:#f92672">%</span> MOD;
+</span></span><span style="display:flex;"><span>            batch_sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    sum <span style="color:#f92672">=</span> (sum <span style="color:#f92672">+</span> batch_sum <span style="color:#f92672">%</span> MOD) <span style="color:#f92672">%</span> MOD;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> sum;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="parallel processing time" src="https://i.imgflip.com/99j2tv.jpg">
+    </div>
+
+    
+</figure></p>
+<p>Fuck it. SIMD time.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">uint64_t</span> <span style="color:#a6e22e">sum_squares_mod_v4</span>(<span style="color:#66d9ef">uint32_t</span> n) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">uint32_t</span> MOD <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000000007</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint64_t</span> sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#ifdef __AVX2__
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// Process 4 squares at once using AVX2
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    __m256i vsum <span style="color:#f92672">=</span> <span style="color:#a6e22e">_mm256_setzero_si256</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Initial increments for 4 parallel sequences
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    __m256i vincr <span style="color:#f92672">=</span> <span style="color:#a6e22e">_mm256_set_epi64x</span>(<span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">2</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Initial squares: 0², 1², 2², 3²
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    __m256i vbase <span style="color:#f92672">=</span> <span style="color:#a6e22e">_mm256_set_epi64x</span>(<span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">15</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">uint32_t</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> (n <span style="color:#f92672">&amp;</span> <span style="color:#f92672">~</span><span style="color:#ae81ff">3ULL</span>); i <span style="color:#f92672">+=</span> <span style="color:#ae81ff">4</span>) {
+</span></span><span style="display:flex;"><span>        vsum <span style="color:#f92672">=</span> <span style="color:#a6e22e">_mm256_add_epi64</span>(vsum, vbase);
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Update squares and increments for next iteration
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        vbase <span style="color:#f92672">=</span> <span style="color:#a6e22e">_mm256_add_epi64</span>(vbase, vincr);
+</span></span><span style="display:flex;"><span>        vincr <span style="color:#f92672">=</span> <span style="color:#a6e22e">_mm256_add_epi64</span>(vincr, <span style="color:#a6e22e">_mm256_set1_epi64x</span>(<span style="color:#ae81ff">8</span>));
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> ((i <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">255</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">255</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">uint64_t</span> temp[<span style="color:#ae81ff">4</span>];
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">_mm256_storeu_si256</span>((__m256i<span style="color:#f92672">*</span>)temp, vsum);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> j <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; j <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">4</span>; j<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>                sum <span style="color:#f92672">=</span> (sum <span style="color:#f92672">+</span> temp[j] <span style="color:#f92672">%</span> MOD) <span style="color:#f92672">%</span> MOD;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            vsum <span style="color:#f92672">=</span> <span style="color:#a6e22e">_mm256_setzero_si256</span>();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#endif
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Handle remaining elements
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">uint32_t</span> i <span style="color:#f92672">=</span> n <span style="color:#f92672">&amp;</span> <span style="color:#f92672">~</span><span style="color:#ae81ff">3ULL</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint64_t</span> square <span style="color:#f92672">=</span> i <span style="color:#f92672">*</span> i;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint64_t</span> increment <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (; i <span style="color:#f92672">&lt;</span> n; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>        sum <span style="color:#f92672">=</span> (sum <span style="color:#f92672">+</span> square <span style="color:#f92672">%</span> MOD) <span style="color:#f92672">%</span> MOD;
+</span></span><span style="display:flex;"><span>        square <span style="color:#f92672">+=</span> increment;
+</span></span><span style="display:flex;"><span>        increment <span style="color:#f92672">+=</span> <span style="color:#ae81ff">2</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> sum;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Running this off an i3-N305 with 8GB of LPDDR5X of ram, you get:</p>
+<pre tabindex="0"><code>Version 1: Naive implementation: 2033000 - 42.451000ms
+Version 2: Batched modulo operations: 2033000 - 8.087000ms
+Version 3: Square number properties: 2033000 - 8.040000ms
+Version 4: SIMD optimization: 0 - 0.696000ms
+</code></pre><h3 id="conclusion">Conclusion</h3>
+<p>So, mission successful. If you have any more ideas to optimize this further, drop a line at the bottom of this page!</p>
+<p>Starting from the naive approach, we saw how each step forward cut down execution time significantly. Using batched modulos in Version 2 helped reduce the constant overhead of % 1000000007 operations, making it much faster. From there, the Version 3 update—incrementally calculating squares based on the difference pattern—avoided repetitive multiplication and kept things moving quickly. (minor diff <strong>my ass</strong>)</p>
+<p>Finally, in Version 4, SIMD processing let us calculate multiple squares in parallel, achieving the biggest performance leap. By the end, we’d gone from a 42.451 ms runtime to just 0.696 ms. We cut down to 1.6% of our initial time!</p>
+<p>Why did I do this? <em>why not?</em></p>
+
+    
+    <script src="https://giscus.app/client.js"
+        data-repo="saxophone-guy/site-comments"
+        data-repo-id="R_kgDONLoUDA"
+        data-category=""
+        data-category-id="DIC_kwDONLoUDM4CkDJi"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="en"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+</script>
+
+    
+  </div>
+
+  
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+      </main>
+    </div>
+
+    <footer>
+      
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+
+<link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+<script defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+
+<script defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body);"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false }
+      ]
+    });
+  });
+</script>
+
+    </footer>
+    
+  </body>
+
+  <script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    document.body.classList.remove("auto");
+    let cls = "light";
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+  }
+
+  function invertBody() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invertBody);
+  }
+
+  setTheme();
+
+</script>
+
+</html>

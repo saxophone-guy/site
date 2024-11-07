@@ -1,0 +1,74 @@
+baseURL = 'https://archit.us.kg/'
+languageCode = 'en-gb'
+title = 'jazz'
+theme = 'typo'
+
+# Basic Configuration
+[taxonomies]
+  tag = 'tags'
+
+# Analytics
+googleAnalytics = "G-5J58QJ9J48"
+
+# Site Parameters
+[params]
+  description = "random stuff i do"
+  theme = 'auto'
+  colorPalette = 'default'
+  hideHeader = false
+  math = true
+  
+  # Home Page Configuration
+  homeIntroTitle = 'Hi!'
+  homeIntroContent = """
+  I'm an average software enthusiast with a strong foundation in computer science and a passion for solving complex problems.
+  I am interested in a range of topics, including algorithms, distributed systems, databases, and information retrieval.
+  I also like frontend programming (sometimes).
+  """
+  homeCollectionTitle = 'Posts'
+  homeCollection = 'posts'
+  
+  # List View Configuration
+  paginationSize = 100
+  listSummaries = true
+  listDateFormat = '2 Jan 2006'
+  breadcrumbs = true
+
+  # Giscus Comments Configuration
+  [params.giscus]
+    enable = true
+    repo = "saxophone-guy/site-comments"
+    repoid = "R_kgDONLoUDA"
+    category = "General"
+    categoryid = "DIC_kwDONLoUDM4CkDJi"
+    mapping = "pathname"
+    theme = "preferred_color_scheme"
+
+# Social Links
+[[params.social]]
+  name = "github"
+  url = "https://github.com/saxophone-guy"
+
+# Navigation Menu
+[[params.menu]]
+  name = "home"
+  url = "/"
+[[params.menu]]
+  name = "posts"
+  url = "/posts"
+[[params.menu]]
+  name = "about"
+  url = "/about"
+
+# Markup Configuration
+[markup]
+  [markup.highlight]
+    style = 'monokai'
+  
+  [markup.goldmark]
+    [markup.goldmark.extensions]
+      [markup.goldmark.extensions.passthrough]
+        enable = true
+        [markup.goldmark.extensions.passthrough.delimiters]
+          block = [['\[', '\]'], ['$$', '$$']]
+          inline = [['\(', '\)']]
