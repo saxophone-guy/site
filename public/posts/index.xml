@@ -6,8 +6,15 @@
     <description>Recent content in Posts on jazz</description>
     <generator>Hugo</generator>
     <language>en-gb</language>
-    <lastBuildDate>Wed, 06 Nov 2024 21:55:08 +0530</lastBuildDate>
+    <lastBuildDate>Thu, 07 Nov 2024 17:01:43 +0530</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Achieving Memory Safety in C</title>
+      <link>http://localhost:1313/posts/memory-safety/</link>
+      <pubDate>Thu, 07 Nov 2024 17:01:43 +0530</pubDate>
+      <guid>http://localhost:1313/posts/memory-safety/</guid>
+      <description>&lt;h3 id=&#34;an-introduction&#34;&gt;An Introduction&lt;/h3&gt;&#xA;&lt;p&gt;Let&amp;rsquo;s talk about memory safety in C. If you&amp;rsquo;ve spent any time writing code in C, you&amp;rsquo;ve probably encountered bugs that don’t just crash your program—they can do all sorts of wonderful things, like turning your screen into a modern art display of random characters or, even worse, quietly corrupting your data.&lt;/p&gt;&#xA;&lt;p&gt;I&amp;rsquo;m making this article to help some of you that are new to low-level programming understand it using a real-life scenario. I&amp;rsquo;m gonna be trying this out with &lt;a href=&#34;https://leetcode.com/problems/generate-parentheses/description/?envType=problem-list-v3&amp;amp;envId=dynamic-programming&#34;&gt;LeetCode&amp;rsquo;s &amp;ldquo;Generate Parentheses&amp;rdquo; problem&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Optimizing a square sum sequence</title>
       <link>http://localhost:1313/posts/first-post/</link>
