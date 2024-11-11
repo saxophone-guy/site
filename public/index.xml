@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Home on jazz</title>
+    <title>jazz</title>
     <link>http://localhost:1313/</link>
-    <description>Recent content in Home on jazz</description>
+    <description>Recent content on jazz</description>
     <generator>Hugo</generator>
     <language>en-gb</language>
     <lastBuildDate>Thu, 07 Nov 2024 17:01:43 +0530</lastBuildDate>

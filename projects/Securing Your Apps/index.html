@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Authentication Demo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.2/axios.min.js"></script>
+    <script
+      src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+      async
+      defer
+    ></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      input {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+      }
+      button {
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:disabled {
+        background-color: #ccc;
+      }
+      .error {
+        color: red;
+        margin-top: 5px;
+      }
+      .success {
+        color: green;
+        margin-top: 5px;
+      }
+      .protected-content {
+        margin-top: 20px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="auth-forms">
+      <h2>Register</h2>
+      <div class="form-group">
+        <input type="email" id="register-email" placeholder="Email" />
+      </div>
+      <div class="form-group">
+        <input type="password" id="register-password" placeholder="Password" />
+      </div>
+      <div
+        class="cf-turnstile"
+        data-sitekey="0x4AAAAAAAzhD2p4c_t18QPS"
+        id="turnstile-reg"
+      ></div>
+      <button onclick="register()">Register</button>
+      <div id="register-message"></div>
+
+      <h2>Login</h2>
+      <div class="form-group">
+        <input type="email" id="login-email" placeholder="Email" />
+      </div>
+      <div class="form-group">
+        <input type="password" id="login-password" placeholder="Password" />
+      </div>
+      <div
+        class="cf-turnstile"
+        data-sitekey="0x4AAAAAAAzhD2p4c_t18QPS"
+        id="turnstile-lgn"
+      ></div>
+      <button onclick="login()">Login</button>
+      <div id="login-message"></div>
+    </div>
+
+    <div id="protected-content" class="protected-content">
+      <h2>Protected Content</h2>
+      <p>This content is only visible when authenticated.</p>
+      <button onclick="checkProtectedRoute()">Check Access</button>
+      <button onclick="logout()">Logout</button>
+      <div id="protected-message"></div>
+    </div>
+
+    <script>
+      let publicKey = null;
+      let token = null;
+
+      function getUTF8ByteLength(str) {
+        return new TextEncoder().encode(str).length;
+      }
+
+      // Import PEM public key for SubtleCrypto
+      async function importPublicKey(pem) {
+        const pemHeader = "-----BEGIN PUBLIC KEY-----";
+        const pemFooter = "-----END PUBLIC KEY-----";
+        const pemContents = pem
+          .replace(pemHeader, "")
+          .replace(pemFooter, "")
+          .replace(/\n/g, "");
+
+        const binaryDer = window.atob(pemContents);
+        const binaryArray = new Uint8Array(binaryDer.length);
+        for (let i = 0; i < binaryDer.length; i++) {
+          binaryArray[i] = binaryDer.charCodeAt(i);
+        }
+
+        return await window.crypto.subtle.importKey(
+          "spki",
+          binaryArray,
+          {
+            name: "RSA-OAEP",
+            hash: { name: "SHA-256" },
+          },
+          true,
+          ["encrypt"],
+        );
+      }
+
+      // Encrypt data with RSA public key
+      async function encryptData(data, publicKey) {
+        const byteLength = getUTF8ByteLength(data);
+        const MAX_BYTES = 432;
+
+        if (byteLength > MAX_BYTES) {
+          throw new Error(
+            `Password exceeds maximum size of ${MAX_BYTES} bytes. Current size: ${byteLength} bytes`,
+          );
+        }
+
+        const encoder = new TextEncoder();
+        const encodedData = encoder.encode(data);
+
+        const encrypted = await window.crypto.subtle.encrypt(
+          {
+            name: "RSA-OAEP",
+          },
+          publicKey,
+          encodedData,
+        );
+
+        return btoa(String.fromCharCode(...new Uint8Array(encrypted)));
+      }
+
+      // Fetch public key on page load
+      async function fetchPublicKey() {
+        try {
+          const response = await axios.get("http://localhost:3000/public-key");
+          const importedKey = await importPublicKey(response.data.publicKey);
+          publicKey = importedKey;
+        } catch (error) {
+          console.error("Error fetching public key:", error);
+        }
+      }
+
+      async function register() {
+        try {
+          const email = document.getElementById("register-email").value;
+          const password = document.getElementById("register-password").value;
+          const turnstileToken = document
+            .getElementById("turnstile-reg")
+            .querySelector('[name="cf-turnstile-response"]').value;
+
+          try {
+            const encryptedPassword = await encryptData(password, publicKey);
+            const response = await axios.post(
+              "http://localhost:3000/register",
+              {
+                email,
+                encryptedPassword,
+                turnstileToken,
+              },
+            );
+            document.getElementById("register-message").innerHTML =
+              `<div class="success">${response.data.message}</div>`;
+          } catch (e) {
+            if (e.message.includes("Password exceeds maximum size")) {
+              document.getElementById("register-message").innerHTML =
+                `<div class="error">${e.message}</div>`;
+              return;
+            }
+            throw e;
+          }
+        } catch (error) {
+          document.getElementById("register-message").innerHTML =
+            `<div class="error">${error.response?.data?.error || "Registration failed"}</div>`;
+          console.log(error);
+        }
+      }
+
+      async function login() {
+        try {
+          const email = document.getElementById("login-email").value;
+          const password = document.getElementById("login-password").value;
+          const turnstileToken = document
+            .getElementById("turnstile-lgn")
+            .querySelector('[name="cf-turnstile-response"]').value;
+
+          console.log(turnstileToken);
+
+          try {
+            const encryptedPassword = await encryptData(password, publicKey);
+            const response = await axios.post("http://localhost:3000/login", {
+              email,
+              encryptedPassword,
+              turnstileToken,
+            });
+            token = response.data.token;
+            document.getElementById("login-message").innerHTML =
+              '<div class="success">Login successful!</div>';
+            document.getElementById("auth-forms").style.display = "none";
+            document.getElementById("protected-content").style.display =
+              "block";
+          } catch (e) {
+            if (e.message.includes("Password exceeds maximum size")) {
+              document.getElementById("login-message").innerHTML =
+                `<div class="error">${e.message}</div>`;
+              return;
+            }
+            throw e;
+          }
+        } catch (error) {
+          document.getElementById("login-message").innerHTML =
+            `<div class="error">${error.response?.data?.error || "Login failed"}</div>`;
+          console.log(error);
+        }
+      }
+
+      async function checkProtectedRoute() {
+        try {
+          const response = await axios.get("http://localhost:3000/protected", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          document.getElementById("protected-message").innerHTML =
+            `<div class="success">${response.data.message}</div>`;
+        } catch (error) {
+          document.getElementById("protected-message").innerHTML =
+            `<div class="error">${error.response?.data?.error || "Access denied"}</div>`;
+        }
+      }
+
+      function logout() {
+        token = null;
+        document.getElementById("auth-forms").style.display = "block";
+        document.getElementById("protected-content").style.display = "none";
+        document.getElementById("login-message").innerHTML = "";
+        document.getElementById("protected-message").innerHTML = "";
+      }
+
+      // Initialize
+      fetchPublicKey();
+    </script>
+  </body>
+</html>

@@ -21,8 +21,8 @@ googleAnalytics = "G-5J58QJ9J48"
   # Home Page Configuration
   homeIntroTitle = 'Hi!'
   homeIntroContent = """
-  I'm an average software enthusiast with a strong foundation in computer science and a passion for solving complex problems.
-  I am interested in a range of topics, including algorithms, distributed systems, databases, and information retrieval.
+  I'm an average software enthusiast with a degree in computer science who likes solving complex problems.
+  My interests are... trivial to say the least, and include (but not limited to) algorithms, databases, and information retrieval.
   I also like frontend programming (sometimes).
   """
   homeCollectionTitle = 'Posts'
