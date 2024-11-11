@@ -1,33 +1,21 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Posts on jazz</title>
-    <link>http://localhost:1313/posts/</link>
-    <description>Recent content in Posts on jazz</description>
-    <generator>Hugo</generator>
-    <language>en-gb</language>
-    <lastBuildDate>Mon, 11 Nov 2024 18:41:47 +0530</lastBuildDate>
-    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Securing Your Apps</title>
-      <link>http://localhost:1313/posts/securing-your-apps/</link>
-      <pubDate>Mon, 11 Nov 2024 18:41:47 +0530</pubDate>
-      <guid>http://localhost:1313/posts/securing-your-apps/</guid>
-      <description>&lt;h2 id=&#34;an-introduction&#34;&gt;An Introduction&lt;/h2&gt;&#xA;&lt;p&gt;Alright, let’s talk about something we developers can get a little messy with: security. See, a lot of you devs can really &lt;a href=&#34;https://www.bbc.com/news/business-41493494&#34;&gt;screw up&lt;/a&gt; sometimes when it comes to security, and sadly, it&amp;rsquo;s not something that a library or anyone else can do for you. It&amp;rsquo;s completely up to you.&lt;/p&gt;&#xA;&lt;p&gt;Imagine building a house. You made it, it looks great, and it works. But what if the walls were made out of paper, there was no roof, and you couldn’t lock the doors? That’s basically what it’s like when you have an app without good security. You’re letting anyone, and I mean anyone, walk right in.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Achieving Memory Safety in C</title>
-      <link>http://localhost:1313/posts/memory-safety/</link>
-      <pubDate>Thu, 07 Nov 2024 17:01:43 +0530</pubDate>
-      <guid>http://localhost:1313/posts/memory-safety/</guid>
-      <description>&lt;h3 id=&#34;an-introduction&#34;&gt;An Introduction&lt;/h3&gt;&#xA;&lt;p&gt;Let&amp;rsquo;s talk about memory safety in C. If you&amp;rsquo;ve spent any time writing code in C, you&amp;rsquo;ve probably encountered bugs that don’t just crash your program—they can do all sorts of wonderful things, like turning your screen into a modern art display of random characters or, even worse, quietly corrupting your data.&lt;/p&gt;&#xA;&lt;p&gt;I&amp;rsquo;m making this article to help some of you that are new to low-level programming understand it using a real-life scenario. I&amp;rsquo;m gonna be trying this out with &lt;a href=&#34;https://leetcode.com/problems/generate-parentheses/description/?envType=problem-list-v3&amp;amp;envId=dynamic-programming&#34;&gt;LeetCode&amp;rsquo;s &amp;ldquo;Generate Parentheses&amp;rdquo; problem&lt;/a&gt;.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Optimizing a square sum sequence</title>
-      <link>http://localhost:1313/posts/first-post/</link>
-      <pubDate>Wed, 06 Nov 2024 21:55:08 +0530</pubDate>
-      <guid>http://localhost:1313/posts/first-post/</guid>
-      <description>&lt;h3 id=&#34;mathematical-background&#34;&gt;Mathematical background&lt;/h3&gt;&#xA;&lt;p&gt;Before I start talking about this, let&amp;rsquo;s understand what we&amp;rsquo;re actually computing.&lt;/p&gt;&#xA;&lt;p&gt;$\sum_{i=0}^{n-1} i^2 \pmod{1000000007}$&lt;/p&gt;&#xA;&lt;p&gt;There are several mathematical properties we can exploit here:&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;The sum of squares has a closed form:&#xA;$\sum_{i=0}^{n-1} i^2 = \frac{(n-1)(n)(2n-1)}{6}$&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;However, this isn&amp;rsquo;t immediately useful to us because the result would overflow for a large $n$, and we need the modulo at each step.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;The properties of modular arithmetic:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;$(a + b) \bmod m = ((a \bmod m) + (b \bmod m)) \bmod m$&lt;/li&gt;&#xA;&lt;li&gt;$(a * b) \bmod m = ((a \bmod m) * (b \bmod m)) \bmod m$&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;This means we can:&lt;/p&gt;</description>
-    </item>
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on jazz</title><link>http://localhost:8000/posts/</link><description>Recent content in Posts on jazz</description><generator>Hugo</generator><language>en-gb</language><lastBuildDate>Thu, 07 Nov 2024 17:01:43 +0530</lastBuildDate><atom:link href="http://localhost:8000/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Achieving Memory Safety in C</title><link>http://localhost:8000/posts/memory-safety/</link><pubDate>Thu, 07 Nov 2024 17:01:43 +0530</pubDate><guid>http://localhost:8000/posts/memory-safety/</guid><description>&lt;h3 id="an-introduction">An Introduction&lt;/h3>
+&lt;p>Let&amp;rsquo;s talk about memory safety in C. If you&amp;rsquo;ve spent any time writing code in C, you&amp;rsquo;ve probably encountered bugs that don’t just crash your program—they can do all sorts of wonderful things, like turning your screen into a modern art display of random characters or, even worse, quietly corrupting your data.&lt;/p>
+&lt;p>I&amp;rsquo;m making this article to help some of you that are new to low-level programming understand it using a real-life scenario. I&amp;rsquo;m gonna be trying this out with &lt;a href="https://leetcode.com/problems/generate-parentheses/description/?envType=problem-list-v3&amp;amp;envId=dynamic-programming">LeetCode&amp;rsquo;s &amp;ldquo;Generate Parentheses&amp;rdquo; problem&lt;/a>.&lt;/p></description></item><item><title>Optimizing a square sum sequence</title><link>http://localhost:8000/posts/first-post/</link><pubDate>Wed, 06 Nov 2024 21:55:08 +0530</pubDate><guid>http://localhost:8000/posts/first-post/</guid><description>&lt;h3 id="mathematical-background">Mathematical background&lt;/h3>
+&lt;p>Before I start talking about this, let&amp;rsquo;s understand what we&amp;rsquo;re actually computing.&lt;/p>
+&lt;p>$\sum_{i=0}^{n-1} i^2 \pmod{1000000007}$&lt;/p>
+&lt;p>There are several mathematical properties we can exploit here:&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>The sum of squares has a closed form:
+$\sum_{i=0}^{n-1} i^2 = \frac{(n-1)(n)(2n-1)}{6}$&lt;/p>
+&lt;ul>
+&lt;li>However, this isn&amp;rsquo;t immediately useful to us because the result would overflow for a large $n$, and we need the modulo at each step.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>The properties of modular arithmetic:&lt;/p>
+&lt;ul>
+&lt;li>$(a + b) \bmod m = ((a \bmod m) + (b \bmod m)) \bmod m$&lt;/li>
+&lt;li>$(a * b) \bmod m = ((a \bmod m) * (b \bmod m)) \bmod m$&lt;/li>
+&lt;/ul>
+&lt;p>This means we can:&lt;/p></description></item></channel></rss>
