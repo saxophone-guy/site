@@ -6,8 +6,15 @@
     <description>Recent content in Posts on jazz</description>
     <generator>Hugo</generator>
     <language>en-gb</language>
-    <lastBuildDate>Thu, 07 Nov 2024 17:01:43 +0530</lastBuildDate>
+    <lastBuildDate>Mon, 11 Nov 2024 18:41:47 +0530</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Securing Your Apps</title>
+      <link>http://localhost:1313/posts/securing-your-apps/</link>
+      <pubDate>Mon, 11 Nov 2024 18:41:47 +0530</pubDate>
+      <guid>http://localhost:1313/posts/securing-your-apps/</guid>
+      <description>&lt;h2 id=&#34;an-introduction&#34;&gt;An Introduction&lt;/h2&gt;&#xA;&lt;p&gt;Alright, let’s talk about something we developers can get a little messy with: security. See, a lot of you devs can really &lt;a href=&#34;https://www.bbc.com/news/business-41493494&#34;&gt;screw up&lt;/a&gt; sometimes when it comes to security, and sadly, it&amp;rsquo;s not something that a library or anyone else can do for you. It&amp;rsquo;s completely up to you.&lt;/p&gt;&#xA;&lt;p&gt;Imagine building a house. You made it, it looks great, and it works. But what if the walls were made out of paper, there was no roof, and you couldn’t lock the doors? That’s basically what it’s like when you have an app without good security. You’re letting anyone, and I mean anyone, walk right in.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Achieving Memory Safety in C</title>
       <link>http://localhost:1313/posts/memory-safety/</link>
